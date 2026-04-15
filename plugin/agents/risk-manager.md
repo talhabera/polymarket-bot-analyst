@@ -41,7 +41,6 @@ description: >
   </commentary>
   </example>
 model: inherit
-tools: Read, Grep, Glob, Bash
 skills:
   - polymarket-analyst:risk-report
   - polymarket-analyst:market-analysis

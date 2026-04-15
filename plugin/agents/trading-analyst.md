@@ -42,7 +42,6 @@ description: >
   </commentary>
   </example>
 model: inherit
-tools: Read, Grep, Glob, Bash, Agent
 skills:
   - polymarket-analyst:analyze-bot
   - polymarket-analyst:compare-strategies

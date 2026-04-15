@@ -42,7 +42,6 @@ description: >
   </commentary>
   </example>
 model: inherit
-tools: Read, Grep, Glob, Bash
 skills:
   - polymarket-analyst:debug-strategy
   - polymarket-analyst:optimize-config

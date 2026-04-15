@@ -41,7 +41,6 @@ description: >
   </commentary>
   </example>
 model: inherit
-tools: Read, Grep, Glob, Bash
 skills:
   - polymarket-analyst:analyze-bot
   - polymarket-analyst:daily-report
@@ -79,6 +78,16 @@ Before calling MCP tools, load them via ToolSearch (e.g., `select:mcp__plugin_po
 
 **Comparison & Export:**
 - `export_bot_data` — Full structured JSON export
+
+**Gamma API (via WebFetch) — For Market Resolution Data:**
+When analyzing paper/test-mode bots or verifying actual market outcomes for decisions, use WebFetch to query the Gamma API. Derive the market slug from decision `expirationTime`:
+```
+startTimestamp = expirationTime - 300
+slug = "btc-updown-5m-" + startTimestamp
+```
+Then fetch: `WebFetch({ url: "https://gamma-api.polymarket.com/events/slug/{slug}", prompt: "Return raw JSON: outcomePrices, eventMetadata.finalPrice, eventMetadata.priceToBeat" })`
+- `outcomePrices: ["1","0"]` → UP won; `["0","1"]` → DOWN won
+- `eventMetadata.finalPrice` and `eventMetadata.priceToBeat` show actual BTC prices
 
 ## Your Role
 
