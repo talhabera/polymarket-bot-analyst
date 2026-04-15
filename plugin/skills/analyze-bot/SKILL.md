@@ -71,6 +71,13 @@ Present findings in this format:
 2. {Second recommendation}
 ```
 
+## Next steps
+
+After presenting the report, suggest relevant follow-up skills:
+- If health score < 60 or specific problems found: "Run `/debug-strategy` for a detailed pipeline diagnosis"
+- If signal quality is low: "Run `/strategy-review` for a deep signal quality analysis"
+- If config seems suboptimal: "Run `/optimize-config` for parameter tuning recommendations"
+
 ## Edge cases
 - If the bot has no trades yet, report "Insufficient data" and recommend waiting for at least 10 trades
 - If the bot is stopped/paused, note this prominently and check if there are open positions that need attention

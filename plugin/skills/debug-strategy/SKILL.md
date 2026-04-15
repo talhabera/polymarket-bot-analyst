@@ -93,6 +93,13 @@ filter out most of these losing trades."
 3. **Monitor**: {What to watch, e.g., "Track win rate at the new threshold for 50 trades"}
 ```
 
+## Next steps
+
+After presenting the diagnosis, suggest relevant follow-up skills:
+- If config changes are needed: "Run `/optimize-config` to get specific parameter recommendations"
+- If signal quality is the root cause: "Run `/strategy-review` for deeper signal analysis"
+- If risk controls are the issue: "Run `/risk-report` for a comprehensive risk assessment"
+
 ## Edge cases
 - If the bot is actually profitable, note this and look for areas of improvement instead
 - If the bot has < 10 trades, say there is not enough data to diagnose

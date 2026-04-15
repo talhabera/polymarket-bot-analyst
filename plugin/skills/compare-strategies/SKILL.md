@@ -24,7 +24,8 @@ For each bot:
 1. **`get_bot_details`** — Details and config
 2. **`get_performance_metrics`** — Performance metrics
 3. **`query_positions`** — Position history
-4. **`analyze_decisions`** — Decision patterns
+4. **`query_orders`** — Order history (for fill rate and slippage metrics)
+5. **`analyze_decisions`** — Decision patterns
 
 You can also use **`compare_bots`** and **`compare_configs`** for direct comparisons.
 

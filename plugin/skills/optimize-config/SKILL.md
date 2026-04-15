@@ -19,16 +19,16 @@ If `$ARGUMENTS` specifies a bot, use it. Otherwise, call `list_bots` and ask the
 
 1. **`get_bot_details`** — Get current config and strategy type
 2. **`get_performance_metrics`** — Get performance metrics
-3. **`analyze_decisions`** — Get recent decisions (last 50) to analyze signal patterns
-4. **`query_positions`** — Get recent positions (last 50) for outcome analysis
+3. **`analyze_config`** — Get config parameter analysis against performance data
+4. **`analyze_decisions`** — Get recent decisions (last 50) to analyze signal patterns
+5. **`query_positions`** — Get recent positions (last 50) for outcome analysis
 
-## Step 3: Read the strategy source to understand parameters
+## Step 3: Understand the parameters
 
-Read the strategy file to understand what each config parameter does:
+Use `get_strategy_info` MCP tool to get strategy metadata and presets. Only read source code if you need to understand HOW a parameter works internally:
 - For edge-trader: `packages/bot-engine/src/strategies/edge-trader/strategy.ts`
 - For last-minute-sniper: `packages/bot-engine/src/strategies/last-minute-sniper/strategy.ts`
-
-Also read `packages/shared/src/strategy-metadata.ts` for preset definitions.
+- For preset definitions: `packages/shared/src/strategy-metadata.ts`
 
 ## Step 4: Analyze each parameter
 

@@ -2,6 +2,7 @@
 name: strategy-review
 description: >
   Deep strategy performance review with signal quality analysis and decision accuracy.
+  This is a deep-dive complement to analyze-bot's quick health check.
   Use when the user asks "strategy review", "how is edge-trader doing", "review my strategy",
   "signal quality", or wants to understand how well their strategy is performing.
 argument-hint: "[bot-name-or-id]"
@@ -23,9 +24,9 @@ If `$ARGUMENTS` specifies a bot, use it. Otherwise, call `list_bots` and ask.
 4. **`query_positions`** — Get positions (last 100) for outcome correlation
 5. **`query_orders`** — Get orders (last 100) for fill rate and slippage
 
-## Step 3: Read strategy source
+## Step 3: Understand strategy logic
 
-Read the strategy implementation to understand the signal generation logic:
+Use `get_strategy_info` MCP tool for metadata and presets. Only read source if you need to understand the signal generation algorithm internally:
 - For edge-trader: `packages/bot-engine/src/strategies/edge-trader/strategy.ts`
 - For last-minute-sniper: `packages/bot-engine/src/strategies/last-minute-sniper/strategy.ts`
 

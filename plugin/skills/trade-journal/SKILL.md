@@ -5,7 +5,6 @@ description: >
   "trade journal", "export trades", "trade history", "trade log",
   or wants a record of trading activity with annotations.
 argument-hint: "[bot-name-or-id] [period: 24h|7d|30d|all]"
-disable-model-invocation: true
 ---
 
 # Trade Journal Export
