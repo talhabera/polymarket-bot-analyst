@@ -117,28 +117,29 @@ Key points:
 ## Fair Value Model Near Expiry
 
 Fair value is computed from the Black-Scholes-style formula using:
-- `btcPrice` — live BTC spot price (from Binance, cached per tick)
-- `priceToBeat` — BTC price at the start of this cycle (fetched once on `onCycleStart`)
+- `btcPrice` — live BTC spot price (from Chainlink on-chain feed via Alchemy Arbitrum RPC, cached 1.5s per tick; falls back to Binance if RPC fails)
+- `priceToBeat` — BTC price at the start of this cycle (fetched from Chainlink `latestRoundData()` on `onCycleStart`; falls back to Binance if Chainlink unavailable)
 - `sigma` — total price movement uncertainty = `volatility * btcPrice * sqrt(timeRemaining)`
 - `d` — z-score: `(btcPrice - priceToBeat) / sigma`
 - `fairUp` = Φ(d) (normal CDF), `fairDown` = 1 - fairUp
+- `maxConfidence` — configurable cap (default 0.85) that limits fairUp and fairDown to prevent overconfident signals due to on-chain feed lag vs Chainlink Data Streams
 
 As time remaining approaches zero, `sigma` collapses. This means:
-- If BTC is clearly above strike: `fairUp` → 1.0, `fairDown` → 0.0
+- If BTC is clearly above strike: `fairUp` → maxConfidence (capped, not 1.0), `fairDown` → low
 - If BTC is near strike: both sides remain near 0.5 even late in the cycle
-- A high `|d|` (large z-score) late in the cycle = very high conviction
+- A high `|d|` (large z-score) late in the cycle = high conviction, but capped at maxConfidence
 
-The sniper is designed to catch cases where the market price (askUp or askDown) is below `maxEntry` despite high conviction, which happens when the market is slow to update.
+**Price source:** All prices come from Chainlink BTC/USD on Arbitrum One (`0x6ce185860a4963106506C203335A2910413708e9`) — the same feed Polymarket uses for market resolution. This ensures the bot's fair values track the actual resolution source. Binance is used only as a fallback when the Chainlink RPC is unavailable.
 
 ## Cycle State Machine
 
 `LastMinuteSniperCycleManager` state per cycle:
 
-- **`onCycleStart`**: Resets all state. Fetches `priceToBeat` (BTC price at cycle open via Binance). Computes and fixes `volatility` from candle closes. Skips the first partial cycle if joined mid-cycle (>10s elapsed).
-- **`onTick`**: Fetches live BTC price, computes fair values, runs signal pipeline. If BUY: sets `pendingBuy=true`, emits `place_buy` action.
+- **`onCycleStart`**: Resets all state. Fetches `priceToBeat` from Chainlink on-chain feed (falls back to Binance if unavailable). Computes and fixes `volatility` from Chainlink historical rounds (time-weighted; falls back to Binance candles). Tracks `priceSource` ("chainlink" or "binance"). Skips the first partial cycle if joined mid-cycle (>10s elapsed).
+- **`onTick`**: Fetches live BTC price from Chainlink (1.5s cache), computes fair values with `maxConfidence` cap, runs signal pipeline. If BUY: sets `pendingBuy=true`, emits `place_buy` action.
 - **`onOrderUpdate`** (filled): Sets `position`, marks `cycleEntryDone=true`. No TP order is placed — position waits for resolve.
 - **`onOrderUpdate`** (cancelled): Clears `pendingBuy`. The cycle remains open for another entry attempt (if time allows).
-- **`onCycleEnd`**: Resolves position based on final BTC price vs `priceToBeat`. Computes P&L. No mid-cycle exits.
+- **`onCycleEnd`** (async): Fetches fresh Chainlink price for resolution (bypasses cache). Resolves position based on Chainlink BTC price vs `priceToBeat`. Falls back to last cached price if Chainlink unavailable. Computes P&L. No mid-cycle exits.
 
 ## MCP Tools — PRIMARY Data Source
 

@@ -151,28 +151,32 @@ Examples with defaults (edgeBase=5, edgeMultiplier=1.25):
 
 ### Fair Value Model
 
-Uses GBM-based binary option pricing:
+Uses GBM-based binary option pricing. **All prices come from Chainlink BTC/USD on Arbitrum One** (`0x6ce185860a4963106506C203335A2910413708e9`) — the same feed Polymarket uses for market resolution. Binance is used only as a fallback when the Chainlink RPC is unavailable.
 
-1. **Volatility** — damped blend of simple and linearly-weighted σ from recent BTC candles:
+1. **Volatility** — damped blend of simple and linearly-weighted σ from Chainlink historical rounds (time-weighted to account for irregular round intervals):
    ```
    σ_damped = volDamping × σ_simple + (1 - volDamping) × σ_weighted
    σ_price  = σ_damped × currentBtcPrice
    ```
+   Falls back to Binance 5m candle closes if Chainlink rounds unavailable.
 2. **Fair value** — normal CDF of z-score:
    ```
    sigmaTotal = σ_price × sqrt(timeRemaining)
    d          = (currentPrice - strikePrice) / sigmaTotal
-   fairUp     = normalCDF(d)
-   fairDown   = 1 - fairUp
+   fairUp     = min(normalCDF(d), maxConfidence)
+   fairDown   = min(1 - normalCDF(d), maxConfidence)
    ```
 
 **Key parameters:**
-- `candleCount` — number of historical candles used. More candles = smoother, slower-reacting σ. Fewer = more reactive but noisy.
-- `volDamping` — blend ratio. 1.0 = pure simple σ (equal weight all candles). 0.0 = pure weighted σ (heavier weight on recent candles).
+- `candleCount` — number of Chainlink historical rounds used for volatility. More rounds = smoother, slower-reacting σ. Fewer = more reactive but noisy.
+- `volDamping` — blend ratio. 1.0 = pure simple σ (equal weight all rounds). 0.0 = pure weighted σ (heavier weight on recent rounds).
+- `maxConfidence` — caps fair values (default 0.85). Prevents overconfident signals since the on-chain feed lags Chainlink Data Streams by up to 60 seconds. A fair value of 0.85 means "very likely but not certain."
 
 **Volatility floor:** σ_price is clamped to at least 0.01% of strike price to avoid degenerate fair values in flat markets.
 
 **Time floor:** timeRemaining is clamped to at least 0.33% (≈1s equivalent) to avoid division-by-zero near cycle end.
+
+**Price source tracking:** Each cycle records whether Chainlink or Binance was used for the strike price (`priceSource` field). The same source preference is used for resolution at cycle end.
 
 ### Take-Profit Mechanics
 
@@ -259,8 +263,9 @@ Check in order:
 ### Why is volatility producing bad fair values?
 
 1. `get_decision_signals` — inspect `volatility` and `sigmaPriceTerms` fields
-2. If σ is near zero → flat candle history, volDamping adjustment won't help; reduce candleCount
-3. If σ is extremely high → noisy candles inflating the model; increase volDamping toward 1.0 or increase candleCount to smooth
+2. If σ is near zero → flat Chainlink round history, volDamping adjustment won't help; reduce candleCount to use fewer rounds
+3. If σ is extremely high → noisy rounds inflating the model; increase volDamping toward 1.0 or increase candleCount to smooth
+4. Check if Chainlink is available — if falling back to Binance candles, volatility may not reflect the resolution source. Look for "Binance fallback" warnings in `query_logs`.
 
 ### Config tuning framework
 
