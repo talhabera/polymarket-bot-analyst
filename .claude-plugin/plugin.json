@@ -1,0 +1,9 @@
+{
+  "name": "polymarket-analyst",
+  "version": "1.0.0",
+  "description": "Trading analysis skills for the Polymarket bot system. Provides bot health checks, strategy optimization, risk reports, and performance analysis by composing MCP server tools into high-level workflows.",
+  "author": {
+    "name": "Polymarket Bot Team"
+  },
+  "keywords": ["polymarket", "trading", "analysis", "bot", "crypto"]
+}
