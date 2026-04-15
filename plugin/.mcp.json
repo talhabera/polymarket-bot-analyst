@@ -2,10 +2,7 @@
   "mcpServers": {
     "polymarket-trading-bot": {
       "type": "http",
-      "url": "https://mcp.leedconversion.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${POLYMARKET_MCP_API_KEY}"
-      }
+      "url": "https://mcp.leedconversion.com/mcp"
     }
   }
 }
