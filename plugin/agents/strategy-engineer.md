@@ -43,6 +43,7 @@ description: >
 model: inherit
 skills:
   - polymarket-analyst:debug-strategy
+  - polymarket-analyst:analyze-strategy-history
   - polymarket-analyst:optimize-config
   - polymarket-analyst:compare-strategies
 color: yellow
@@ -74,6 +75,7 @@ Before calling MCP tools, load them via ToolSearch (e.g., `select:mcp__plugin_po
 - `analyze_decisions` — Decision pattern analysis
 - `get_decision_signals` — Raw decision signals from JSONB
 - `analyze_config` — Config parameter analysis against performance
+- `analyze_missed_opportunities` — Quantify opportunity cost by miss type (WAIT regret, filter rejection, idle, early exit, late entry, peer wins) with config-attributed counterfactuals
 
 **Comparison:**
 - `compare_bots` — Side-by-side bot comparison
