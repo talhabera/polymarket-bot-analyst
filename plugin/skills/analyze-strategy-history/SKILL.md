@@ -69,9 +69,12 @@ Sort the active buckets by `wouldBePnl` descending. Present only buckets with
 
 ### Headline
 - **Realized P&L:** ${realized from get_performance_metrics.totalPnl}
-- **Money left on table:** ${summary.wouldBePnlLeftOnTable}
-- **Ratio:** {wouldBePnl / max(realized, 0.01), 1 decimal}x — {interpretation sentence}
+- **Per-share delta left on table:** ${summary.wouldBePnlLeftOnTable} (price-delta on 1-contract counterfactuals; excludes peer wins)
+- **Peer-observed dollars:** ${peerWins.wouldBePnl} (realized P&L from peer bots on cycles this bot skipped)
 - **Obvious misses:** {summary.obviousMissesCount} cycles
+
+Do NOT sum `wouldBePnlLeftOnTable` and `peerWins.wouldBePnl` — they are in different units
+(per-share price delta vs realized dollars at the peer's position size).
 
 ### Active miss buckets (ranked by $ impact)
 
