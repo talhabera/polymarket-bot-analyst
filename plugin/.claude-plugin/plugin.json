@@ -1,11 +1,11 @@
 {
   "name": "polymarket-analyst",
   "version": "1.0.0",
-  "description": "Trading analysis skills for the Polymarket bot system — 8 agents, 12 skills, MCP-powered workflows for bot health checks, strategy optimization, risk reports, performance analysis, and forward-test experiments",
+  "description": "Trading analysis toolkit for the Polymarket bot system — 11 agents, 13 skills, MCP-powered workflows for fleet monitoring, bot operations, trade forensics, strategy optimization, risk reports, performance analysis, and forward-test experiments",
   "author": {
     "name": "Talha Bera"
   },
-  "repository": "https://github.com/talhabera/polymarket-analyst",
+  "repository": "https://github.com/talhabera/polymarket-bot-analyst",
   "license": "MIT",
   "keywords": ["polymarket", "trading", "analysis", "bot", "crypto"]
 }

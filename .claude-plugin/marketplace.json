@@ -9,14 +9,14 @@
   "plugins": [
     {
       "name": "polymarket-analyst",
-      "description": "Trading analysis skills for the Polymarket bot system — 1 agent, 9 skills, MCP-powered workflows for bot health checks, strategy optimization, risk reports, and performance analysis",
+      "description": "Trading analysis toolkit for the Polymarket bot system — 11 agents, 13 skills, MCP-powered workflows for fleet monitoring, bot operations, trade forensics, strategy optimization, risk reports, performance analysis, and forward-test experiments",
       "author": {
         "name": "Talha Bera",
         "email": "talhabera@protonmail.com"
       },
       "source": "./plugin",
       "category": "development",
-      "homepage": "https://github.com/talhabera/polymarket-analyst"
+      "homepage": "https://github.com/talhabera/polymarket-bot-analyst"
     }
   ]
 }
