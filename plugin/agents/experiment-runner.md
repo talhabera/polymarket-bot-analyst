@@ -60,8 +60,10 @@ Before calling MCP tools, load them via ToolSearch (e.g., `select:mcp__plugin_po
 
 **Experiment lifecycle (new tools — your core capability):**
 - `spawn_variants` — Clone a running bot into 1..20 paper-trade variants with config overrides. All variants share an `experimentGroupId` (e.g., `exp-7f2a`), run as `mode=test`, and start immediately. Enforces fleet cap (max 50 running test bots) and validates override keys against the strategy's `defaultConfig`. Rejects `mode` in overrides.
+- `get_experiment_status` — Status of every variant in an `experimentGroupId`: per-variant running/stopped/archived state, elapsed runtime, trade count, and quick performance summary. Use to check mid-experiment health without running a full performance comparison.
 - `stop_experiment` — Stops every non-archived bot in an `experimentGroupId`. Returns the stopped bot IDs. Does NOT archive.
 - `archive_variant` — Archives one variant bot (sets `status=stopped, isArchived=true`). Rejects standalone bots — only works on bots with `experimentSourceBotId` set.
+- `promote_variant` — Promote a winning variant's config onto its live source bot. Overwrites the source bot's config with the variant's (preserving mode and ID). **High-impact write** — only call after a decisive winner has emerged (≥30 trades, consistent outperformance). For routine promotions prefer routing through the bot-operator agent, which runs a diff/confirm step.
 
 **Bot Management:**
 - `list_bots` — All bots with summary stats (use to find `experimentGroupId` / `experimentSourceBotId` when user doesn't remember the IDs)

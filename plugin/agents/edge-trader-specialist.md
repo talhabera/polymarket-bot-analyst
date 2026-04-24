@@ -68,6 +68,8 @@ Always query MCP tools before reading source files. Live data tells you what is 
 - `get_decision_signals` — Raw JSONB debug fields per decision tick: fairUp, fairDown, marketUp, marketDown, edgeUp, edgeDown, edgeThreshold, slotIndex, signal, signalEdge, volatility, sigmaPriceTerms, timeRemaining
 - `analyze_decisions` — Aggregated decision patterns: BUY rate, WAIT rate, NO_TRADE_ZONE rate, signal distribution by slot
 - `analyze_config` — Parameter analysis correlated with outcomes
+- `get_edge_trader_slot_table` — Edge-trader-specific: resolved per-slot edge thresholds for a given config (or a given bot's current config). Returns the full `edgeThreshold(slot)` table as actually computed, including any tp/cooldown slot-specific values. Use instead of hand-calculating `edgeBase × edgeMultiplier^slot`.
+- `get_skip_reason_histogram` — Distribution of skip reasons over a time window. For edge-trader, expect `no_trade_zone`, `wait_only`, `edge_below_threshold`, `cooldown_active`. Use to diagnose "why isn't my bot trading?" by identifying the dominant skip reason.
 
 **Performance & Trade Analysis:**
 - `get_performance_metrics` — Win rate, profit factor, expectancy, drawdown
